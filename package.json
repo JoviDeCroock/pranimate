@@ -1,0 +1,62 @@
+{
+  "name": "pranimate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoviDeCroock/pranimate.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JoviDeCroock/pranimate/issues"
+  },
+  "homepage": "https://github.com/JoviDeCroock/pranimate#readme",
+  "devDependencies": {
+    "@testing-library/preact": "2.0.0",
+    "@typescript-eslint/eslint-plugin": "2.11.0",
+    "@typescript-eslint/parser": "2.11.0",
+    "cross-env": "5.2.0",
+    "eslint": "6.7.2",
+    "eslint-config-prettier": "6.7.0",
+    "eslint-plugin-react": "7.17.0",
+    "husky": "3.1.0",
+    "lint-staged": "9.5.0",
+    "microbundle": "0.12.2",
+    "preact": "^10.5.3",
+    "prettier": "1.19.1",
+    "rimraf": "2.6.3",
+    "tslib": "2.0.0",
+    "typescript": "3.9.6"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  },
+  "mangle": {
+    "regex": "^_"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "lint-staged": {
+    "*.{json,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
+}
