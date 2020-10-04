@@ -56,8 +56,9 @@
     "typescript": "3.9.6"
   },
   "peerDependencies": {
-    "react": ">=16.8.0"
+    "preact": ">=10.0.0"
   },
+  "dependencies": {},
   "mangle": {
     "regex": "^_"
   },
