@@ -1,23 +1,24 @@
 import { useState, useLayoutEffect, useCallback } from 'preact/hooks';
 
-interface UseMountUnmountArguments {
+export interface UseMountUnmountArguments {
   mountingClass: string;
   unmountingClass: string;
   duration: number;
+  lazy?: boolean;
 }
 
-type UseMountUnmountValues = [string, boolean, () => void];
+export type UseMountUnmountValues = [string, boolean, () => void, () => void];
 
 export const useMountUnmount = ({
   mountingClass,
   unmountingClass,
   duration,
+  lazy,
 }: UseMountUnmountArguments): UseMountUnmountValues => {
-  const [mounted, setMounted] = useState(true);
-  const [isMounting, setIsMounting] = useState(true);
+  const [mounted, setMounted] = useState(!lazy);
+  const [isMounting, setIsMounting] = useState(!lazy);
   const [isUnmounting, setIsUnmounting] = useState(false);
 
-  // Can also be attached with useImperativeHandle to the parent.
   const unmount = useCallback(() => {
     setIsUnmounting(true);
     setTimeout(() => {
@@ -26,15 +27,30 @@ export const useMountUnmount = ({
     }, duration);
   }, []);
 
-  useLayoutEffect(() => {
-    setTimeout(() => {
-      setIsMounting(false);
-    }, duration);
+  const mount = useCallback(() => {
+    setIsMounting(true);
+    setMounted(true);
   }, []);
+
+  useLayoutEffect(() => {
+    if (isMounting === true) {
+      const timeoutId = setTimeout(() => {
+        setIsMounting(false);
+        (timeoutId as any) = null;
+      }, duration);
+
+      return () => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+      };
+    }
+  }, [isMounting]);
 
   return [
     isMounting ? mountingClass : isUnmounting ? unmountingClass : '',
     mounted,
+    mount,
     unmount,
   ];
 };

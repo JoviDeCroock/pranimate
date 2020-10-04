@@ -1,7 +1,7 @@
 import { Ref } from 'preact';
 import { useState, useLayoutEffect, useRef } from 'preact/hooks';
 
-interface UseSpringProps {
+export interface UseSpringProps {
   lazy?: boolean;
   from?: number;
   to: number;
