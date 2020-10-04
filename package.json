@@ -1,10 +1,11 @@
 {
   "name": "pranimate",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Lightweight library for basic animations",
   "scripts": {
     "build": "rimraf dist && microbundle --define process.env.NODE_ENV=production --external preact --name pranimate --no-compress --output dist/",
-    "build:ci": "microbundle --define process.env.NODE_ENV=production --external preact --name pranimate --output dist/"
+    "build:ci": "microbundle --define process.env.NODE_ENV=production --external preact --name pranimate --output dist/",
+    "prepublishOnly": "yarn build"
   },
   "repository": {
     "type": "git",
