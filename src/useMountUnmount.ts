@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, useCallback } from 'preact/hooks';
+import { useState, useLayoutEffect, useCallback, useRef } from 'preact/hooks';
 
 export interface UseMountUnmountArguments {
   mountingClass: string;
@@ -15,6 +15,7 @@ export const useMountUnmount = ({
   duration,
   lazy,
 }: UseMountUnmountArguments): UseMountUnmountValues => {
+  const timeoutId = useRef<any>();
   const [mounted, setMounted] = useState(!lazy);
   const [isMounting, setIsMounting] = useState(!lazy);
   const [isUnmounting, setIsUnmounting] = useState(false);
@@ -34,17 +35,18 @@ export const useMountUnmount = ({
 
   useLayoutEffect(() => {
     if (isMounting === true) {
-      const timeoutId = setTimeout(() => {
+      timeoutId.current = setTimeout(() => {
         setIsMounting(false);
-        (timeoutId as any) = null;
+        (timeoutId.current as any) = null;
       }, duration);
-
-      return () => {
-        if (timeoutId) {
-          clearTimeout(timeoutId);
-        }
-      };
     }
+
+    return () => {
+      if (timeoutId.current) {
+        clearTimeout(timeoutId.current);
+        (timeoutId.current as any) = null;
+      }
+    };
   }, [isMounting]);
 
   return [
