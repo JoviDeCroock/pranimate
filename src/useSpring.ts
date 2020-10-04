@@ -22,22 +22,23 @@ export const useSpring = ({
   preset,
 }: UseSpringProps): [Ref<HTMLElement>, (activated: boolean) => void] => {
   const from = propsFrom || 0;
+
   const [activated, setActivated] = useState(!lazy);
   const [reverse, setReverse] = useState(false);
+
   const ref = useRef<HTMLElement>();
   const value = useRef(from);
   const intervalId = useRef<any>();
 
   useLayoutEffect(() => {
     if (activated) {
-      const target = reverse ? from : to;
       let i = 0;
 
       intervalId.current = setInterval(() => {
         requestAnimationFrame(() => {
           value.current = lerp(
             reverse ? to : from,
-            target,
+            reverse ? from : to,
             presets[preset || 'noWobble'](++i / 100)
           );
 
@@ -47,9 +48,11 @@ export const useSpring = ({
             : value.current;
         });
 
-        if (isApproximatelyEqual(value.current, target, 0.01)) {
+        if (isApproximatelyEqual(value.current, reverse ? from : to, 0.01)) {
           clearInterval(intervalId.current);
+          intervalId.current = null;
           value.current = reverse ? from : to;
+
           if (infinite) {
             setReverse(!reverse);
           }
