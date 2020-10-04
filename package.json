@@ -1,10 +1,10 @@
 {
   "name": "pranimate",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.1.0",
+  "description": "Lightweight library for basic animations",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rimraf dist && microbundle --define process.env.NODE_ENV=production --external preact --name pranimate --no-compress --output dist/",
+    "build:ci": "microbundle --define process.env.NODE_ENV=production --external preact --name pranimate --output dist/"
   },
   "repository": {
     "type": "git",
@@ -15,7 +15,28 @@
   "bugs": {
     "url": "https://github.com/JoviDeCroock/pranimate/issues"
   },
+  "keywords": [
+    "preact",
+    "hooks",
+    "animations"
+  ],
   "homepage": "https://github.com/JoviDeCroock/pranimate#readme",
+  "main": "./dist/pranimate.js",
+  "browser": "./dist/pranimate.umd.js",
+  "umd:main": "./dist/pranimate.umd.js",
+  "jsnext:main": "./dist/pranimate.modern.js",
+  "module": "./dist/pranimate.esm.js",
+  "source": "./src/index.ts",
+  "types": "./dist/index.d.ts",
+  "typings": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "browser": "./dist/pranimate.esm.js",
+      "umd": "./dist/pranimate.umd.js",
+      "import": "./dist/pranimate.esm.js",
+      "require": "./dist/pranimate.js"
+    }
+  },
   "devDependencies": {
     "@testing-library/preact": "2.0.0",
     "@typescript-eslint/eslint-plugin": "2.11.0",

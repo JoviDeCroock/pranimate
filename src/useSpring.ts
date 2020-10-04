@@ -1,3 +1,4 @@
+import { Ref } from 'preact';
 import { useState, useLayoutEffect, useRef } from 'preact/hooks';
 
 interface UseSpringProps {
@@ -20,48 +21,55 @@ export const useSpring = ({
   getValue,
   property,
   infinite,
-  lazy
+  lazy,
 }: UseSpringProps): [Ref<HTMLElement>, (activated: boolean) => void] => {
   const from = propsFrom || 0;
   const [activated, setActivated] = useState(!lazy);
   const [reverse, setReverse] = useState(false);
   const ref = useRef<HTMLElement>();
   const value = useRef(from);
+  const timeoutId = useRef<any>();
+  const intervalId = useRef<any>();
 
   useLayoutEffect(() => {
     if (activated) {
       const target = reverse ? from : to;
       const tick = Math.abs(from - to) / duration;
-      const intervalID = setInterval(() => {
+      intervalId.current = setInterval(() => {
         value.current = lerp(value.current, target, tick);
-        if (value.current === target) {
-          clearInterval(intervalID);
-        } else {
-          requestAnimationFrame(() => {
-            ref.current.style[property] = getValue
-              ? getValue(value.current)
-              : value.current;
-          });
-        }
+        requestAnimationFrame(() => {
+          // @ts-ignore
+          ref.current.style[property] = getValue
+            ? getValue(value.current)
+            : value.current;
+        });
       }, tick);
 
-      const timeoutID = setTimeout(() => {
-        clearInterval(intervalID);
+      timeoutId.current = setTimeout(() => {
+        clearInterval(intervalId.current);
+        intervalId.current = null;
         requestAnimationFrame(() => {
-          ref.current.style[property] = getValue(target);
+          // @ts-ignore
+          ref.current.style[property] = getValue ? getValue(target) : target;
           if (infinite) {
             setReverse(!reverse);
             value.current = reverse ? from : to;
-            console.log("setting value to", value.current);
           }
         });
       }, duration);
-
-      return () => {
-        clearInterval(intervalID);
-        clearTimeout(timeoutID);
-      };
     }
+
+    return () => {
+      if (intervalId.current) {
+        clearInterval(intervalId.current);
+        intervalId.current = null;
+      }
+
+      if (timeoutId.current) {
+        clearTimeout(timeoutId.current);
+        timeoutId.current = null;
+      }
+    };
   }, [reverse, activated]);
 
   return [ref, setActivated];
