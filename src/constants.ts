@@ -12,8 +12,6 @@ export const presets = {
     1,
 };
 
-export const frameTiming = 1000 / 60;
-
 export function isApproximatelyEqual(v1: number, v2: number, epsilon: number) {
   return Math.abs(v1 - v2) < epsilon;
 }
