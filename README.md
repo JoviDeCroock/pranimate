@@ -39,7 +39,6 @@ const SpringAnimation = () => {
     to: 75,
     getValue: x => `translateX(${x}vw)`,
     property: 'transform',
-    duration: 2000,
     infinite: true,
   });
 
