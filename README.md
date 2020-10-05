@@ -26,6 +26,7 @@ This hook accepts an object as argument, this object can contain seven propertie
 - infinite, whether or not the animation should keep animating back and forth
 - lazy, whether or not the hook should start with the animation started
 - preset, this can be either 'wobbly' | 'noWobble' | 'stiff' which are three spring mechanics
+- velocity, by default 1 you can tweak this number to have your proper speed
 
 The hook returns you a tuple with the first being a ref which you should attach to the element you are animating,
 the second being a function that activates the animation, this can be handy when you started in the lazy mode.

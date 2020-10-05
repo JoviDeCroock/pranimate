@@ -31,17 +31,19 @@ export const useSpring = ({
   const ref = useRef<HTMLElement>();
   const animationRef = useRef<any>(null);
   const value = useRef(from);
+  const counter = useRef(0);
 
   useLayoutEffect(() => {
     if (activated) {
-      let i = 0;
-
       const update = () =>
         (animationRef.current = requestAnimationFrame(() => {
+          counter.current = counter.current + 1;
           value.current = lerp(
             reverse ? to : from,
             reverse ? from : to,
-            presets[preset || 'noWobble']((++i * (velocity || 1)) / 100)
+            presets[preset || 'noWobble'](
+              (counter.current * (velocity || 1)) / 200
+            )
           );
 
           // @ts-ignore
@@ -51,7 +53,7 @@ export const useSpring = ({
 
           if (isApproximatelyEqual(value.current, reverse ? from : to, 0.01)) {
             value.current = reverse ? from : to;
-
+            counter.current = 0;
             if (infinite) {
               setReverse(!reverse);
             }
