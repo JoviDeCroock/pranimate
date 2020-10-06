@@ -3,7 +3,7 @@
   "version": "0.1.3",
   "description": "Lightweight library for basic animations",
   "scripts": {
-    "build": "rimraf dist && microbundle --define process.env.NODE_ENV=production --external preact --name pranimate --no-compress --output dist/",
+    "build": "rimraf dist && microbundle --external preact --name pranimate --no-compress --output dist/",
     "build:ci": "microbundle --define process.env.NODE_ENV=production --external preact --name pranimate --output dist/",
     "prepublishOnly": "yarn build"
   },
