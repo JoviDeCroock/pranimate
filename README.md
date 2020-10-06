@@ -13,7 +13,8 @@ yarn add pranimate
 
 ## Usage
 
-https://codesandbox.io/s/practical-swartz-s7jx3
+- [Basic Example](https://codesandbox.io/s/practical-swartz-s7jx3)
+- [Turning card](https://codesandbox.io/s/determined-browser-tnj90?file=/src/index.js)
 
 ### useSpring
 
@@ -29,7 +30,8 @@ This hook accepts an object as argument, this object can contain seven propertie
 - velocity, by default 1 you can tweak this number to have your proper speed
 
 The hook returns you a tuple with the first being a ref which you should attach to the element you are animating,
-the second being a function that activates the animation, this can be handy when you started in the lazy mode.
+the second being a function that activates the animation, this can be handy when you started in the lazy mode and the
+thirth being a function called play to imperatively play your animation once.
 
 Example:
 
