@@ -14,7 +14,7 @@ yarn add pranimate
 ## Usage
 
 - [Basic Example](https://codesandbox.io/s/practical-swartz-s7jx3)
-- [Turning card](https://codesandbox.io/s/determined-browser-tnj90?file=/src/index.js)
+- [Turning card](https://codesandbox.io/s/determined-browser-tnj90)
 
 ### useSpring
 
