@@ -1,5 +1,5 @@
 import { Ref } from 'preact';
-import { useState, useLayoutEffect, useRef } from 'preact/hooks';
+import { useState, useLayoutEffect, useRef, useCallback } from 'preact/hooks';
 import { presets, lerp, isApproximatelyEqual } from './constants';
 
 export interface UseSpringProps {
@@ -22,7 +22,11 @@ export const useSpring = ({
   lazy,
   preset,
   velocity,
-}: UseSpringProps): [Ref<HTMLElement>, (activated: boolean) => void] => {
+}: UseSpringProps): [
+  Ref<HTMLElement>,
+  (activated: boolean) => void,
+  () => void
+] => {
   const from = propsFrom || 0;
 
   const [activated, setActivated] = useState(!lazy);
@@ -32,47 +36,64 @@ export const useSpring = ({
   const animationRef = useRef<any>(null);
   const value = useRef(from);
   const counter = useRef(0);
+  const isPlaying = useRef(false);
+
+  const update = useCallback(() => {
+    animationRef.current = requestAnimationFrame(() => {
+      counter.current = counter.current + 1;
+      value.current = lerp(
+        reverse ? to : from,
+        reverse ? from : to,
+        presets[preset || 'noWobble']((counter.current * (velocity || 1)) / 200)
+      );
+
+      if (isApproximatelyEqual(value.current, reverse ? from : to, 0.01)) {
+        value.current = reverse ? from : to;
+        counter.current = 0;
+        animationRef.current = null;
+
+        if (infinite) {
+          setReverse(!reverse);
+        } else {
+          isPlaying.current = false;
+        }
+      } else {
+        // @ts-ignore
+        ref.current.style[property] = getValue
+          ? getValue(value.current)
+          : value.current;
+
+        update();
+      }
+    });
+  }, [infinite, from, to, preset, property, reverse, velocity, getValue]);
+
+  const play = useCallback(() => {
+    if (isPlaying.current && animationRef.current) {
+      counter.current = 0;
+      cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
+    }
+
+    isPlaying.current = true;
+    update();
+  }, [update]);
 
   useLayoutEffect(() => {
     if (activated) {
-      const update = () =>
-        (animationRef.current = requestAnimationFrame(() => {
-          counter.current = counter.current + 1;
-          value.current = lerp(
-            reverse ? to : from,
-            reverse ? from : to,
-            presets[preset || 'noWobble'](
-              (counter.current * (velocity || 1)) / 200
-            )
-          );
-
-          // @ts-ignore
-          ref.current.style[property] = getValue
-            ? getValue(value.current)
-            : value.current;
-
-          if (isApproximatelyEqual(value.current, reverse ? from : to, 0.01)) {
-            value.current = reverse ? from : to;
-            counter.current = 0;
-            if (infinite) {
-              setReverse(!reverse);
-            }
-          } else {
-            animationRef.current = null;
-            update();
-          }
-        }));
-
-      update();
+      play();
     }
 
     return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = null;
+      if (activated) {
+        counter.current = 0;
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+          animationRef.current = null;
+        }
       }
     };
-  }, [reverse, activated, infinite, property, preset, from, to, getValue]);
+  }, [activated, play]);
 
-  return [ref, setActivated];
+  return [ref, setActivated, play];
 };
