@@ -39,20 +39,20 @@
     }
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "2.11.0",
-    "@typescript-eslint/parser": "2.11.0",
-    "cross-env": "5.2.0",
-    "eslint": "6.7.2",
-    "eslint-config-prettier": "6.7.0",
-    "eslint-plugin-react": "7.17.0",
-    "husky": "3.1.0",
-    "lint-staged": "9.5.0",
-    "microbundle": "0.12.2",
-    "preact": "^10.5.3",
-    "prettier": "1.19.1",
-    "rimraf": "2.6.3",
-    "tslib": "2.0.0",
-    "typescript": "3.9.6"
+    "@typescript-eslint/eslint-plugin": "^4.4.0",
+    "@typescript-eslint/parser": "^4.4.0",
+    "cross-env": "^7.0.2",
+    "eslint": "^7.10.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-react": "^7.21.3",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.4.0",
+    "microbundle": "^0.12.4",
+    "preact": "^10.5.4",
+    "prettier": "^2.1.2",
+    "rimraf": "^3.0.2",
+    "tslib": "^2.0.2",
+    "typescript": "^4.0.3"
   },
   "peerDependencies": {
     "preact": ">=10.0.0"
@@ -67,13 +67,11 @@
   },
   "lint-staged": {
     "*.{json,md}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ],
     "*.{ts,tsx}": [
       "eslint --fix",
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "husky": {
