@@ -1,6 +1,6 @@
 {
   "name": "pranimate",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Lightweight library for basic animations",
   "scripts": {
     "build": "rimraf dist && microbundle --external preact --name pranimate --no-compress --output dist/",
@@ -11,8 +11,8 @@
     "type": "git",
     "url": "git+https://github.com/JoviDeCroock/pranimate.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "jdecroock <decroockjovi@gmail.com> (https://twitter.com/JoviDeC)",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/JoviDeCroock/pranimate/issues"
   },
